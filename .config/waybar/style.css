@@ -1,0 +1,78 @@
+/* Waybar Ash Theme */
+@define-color foreground #ffffff;
+@define-color background #121212;
+
+
+* {
+  background-color: @background;
+  color: @foreground;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  font-family: 'CaskaydiaMono Nerd Font';
+  font-size: 12px;
+  
+}
+
+.modules-left {
+  margin-left: 8px;
+}
+
+.modules-right {
+  margin-right: 8px;
+}
+
+#workspaces button {
+  all: initial;
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 9px;
+}
+
+#workspaces button.empty {
+  opacity: 0.4;
+}
+
+#battery,
+#pulseaudio {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+#tray {
+  margin-right: 21px;
+}
+
+#bluetooth {
+  margin-right: 14px;
+}
+
+#network {
+  margin-right: 6px;
+}
+
+#custom-expand-icon {
+  margin-right: 16px;
+}
+
+#custom-cpu-mem {
+    font-size: 10px;
+    padding: 0px 2px;
+}
+
+tooltip {
+  padding: 1px;
+}
+
+#clock {
+  margin-left: 8.75px;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+#custom-archi-btn {
+  font-size: 16px;
+}
+

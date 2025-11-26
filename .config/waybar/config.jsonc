@@ -1,0 +1,129 @@
+{
+  "reload_style_on_change": true,
+  "layer": "top",
+  "position": "top",
+  "spacing": 0,
+  "height": 26,
+
+  "modules-left": ["custom/archi-btn", "custom/cpu-mem", "custom/prayer"],
+  "modules-center": ["hyprland/workspaces"],
+  "modules-right": ["group/tray-expander", "bluetooth", "network", "pulseaudio", "battery", "clock"],
+
+  "custom/archi-btn": {
+    "format": "󰣇 ",
+    // "on-click": "archi-menu",
+    "on-click": "walker",
+    "on-click-right": "xdg-terminal-exec",
+    "tooltip-format": "archi Menu\n\nSuper + Alt + Space"
+  },
+  "custom/cpu-mem": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "~/.config/waybar/cpu-mem.sh",
+    "on-click": "xdg-terminal-exec btop",
+    "interval": 5
+  },
+  "custom/prayer": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "bun ~/.config/waybar/prayer/prayer.cjs",
+    "interval": 150,
+    "on-click": "bun ~/.config/waybar/prayer/prayer.cjs"
+  },
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "default": "●",
+      "1": "○",
+      "2": "○",
+      "3": "○",
+      "4": "○",
+      "5": "○",
+      "6": "○",
+      "7": "○",
+      "8": "○",
+      "9": "○",
+      "active": "●"
+    },
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": []
+    },
+    "on-click": "activate",
+    "tooltip": true
+  },
+
+  "clock": {
+    "format": "{:L%a %d %b - %H:%M}",
+    "format-alt": "{:L%d %B W%V %Y}",
+    "tooltip-format": "love u ♥ "
+  },
+  "network": {
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "format": "{icon}",
+    "format-wifi": "{icon}",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "󰤮",
+    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-disconnected": "Disconnected",
+    "interval": 3,
+    "spacing": 1,
+    "on-click": "xdg-terminal-exec impala"
+  },
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-discharging": "{icon}",
+    "format-charging": "{icon}",
+    "format-plugged": "",
+    "format-icons": {
+      "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+    "format-full": "󰂅",
+    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
+    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+    "interval": 300,
+    "states": {
+      "warning": 20,
+      "critical": 10
+    }
+  },
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "󰂲",
+    "format-connected": "",
+    "tooltip-format": "Devices connected: {num_connections}",
+    "on-click": "xdg-terminal-exec bluetui"
+  },
+  "pulseaudio": {
+    "format": "{icon}",
+    "on-click": "xdg-terminal-exec --app-id=com.Wiremix -e wiremix",
+    "on-click-right": "pamixer -t",
+    "tooltip-format": "Playing at {volume}%",
+    "scroll-step": 5,
+    "format-muted": "",
+    "format-icons": {
+      "default": ["", "", ""]
+    }
+  },
+  "group/tray-expander": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 100,
+      "children-class": "tray-group-item"
+    },
+    "modules": ["custom/expand-icon", "tray"]
+  },
+  "custom/expand-icon": {
+    "format": "󰞗",
+    "tooltip": false
+  },
+
+  "tray": {
+    "icon-size": 12,
+    "spacing": 17
+  }
+}

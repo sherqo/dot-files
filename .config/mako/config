@@ -1,0 +1,26 @@
+default-timeout=5000
+
+# Colors
+background-color=#1e2127
+text-color=#c8cddd
+border-color=#3a3f4d
+progress-color=over #89ddff
+
+[urgency=low]
+border-color=#3a3f4d
+
+[urgency=normal]
+border-color=#5c6579
+
+[urgency=critical]
+default-timeout=5000000
+background-color=#d0679d
+text-color=#ffffff
+border-color=#ff80b3
+progress-color=over #ffffff
+
+# Font & window
+font="CaskaydiaMono Nerd Font 10"
+padding=14
+border-size=1
+border-radius=6
