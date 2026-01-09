@@ -7,7 +7,21 @@ export PATH="$HOME/.local/archi/bin:$PATH" # archi scripts
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-PS1="\[\e[35m\]\w\[\e[m\] \[\e[36m\]archlinux \[\e[m\] "
+source /usr/share/git/completion/git-prompt.sh
+
+PS1='\[\e[35m\]\u@\h\[\e[m\] \[\e[34m\]\w\[\e[m\] λ '
+
+# ============== history ==============
+shopt -s histappend
+export HISTSIZE=100000
+export HISTFILESIZE=200000
+export HISTCONTROL=ignoreboth
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+# fzf stuff
+source /usr/share/fzf/key-bindings.bash
+source /usr/share/fzf/completion.bash
 
 # ============== aliases ==============
 # eza & zoxide
@@ -25,11 +39,15 @@ eval "$(zoxide init bash)"
 # grep
 alias grep='grep --color=auto'
 
-# create_ap
-alias ap='create_ap'
+# trash-cli & rm
+alias trash='trash-put'
+alias rm='rm -Iv'
 
 # zed code editor
 alias zed='zeditor'
+
+# get used ports
+alias ports='ss -tulpn'
 
 # ======= PATHs =======
 export BUN_INSTALL="$HOME/.bun"
