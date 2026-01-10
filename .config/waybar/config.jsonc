@@ -7,7 +7,16 @@
 
   "modules-left": ["custom/archi-btn", "cpu", "memory", "custom/prayer"],
   "modules-center": ["hyprland/workspaces"],
-  "modules-right": ["group/tray-expander", "bluetooth", "network", "pulseaudio", "battery", "clock"],
+  "modules-right": [
+    "group/tray-expander",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "battery",
+    "clock",
+    "custom/calendar",
+    "custom/workday_progress"
+  ],
 
   "custom/archi-btn": {
     "format": "󰣇 ",
@@ -59,7 +68,7 @@
     "format": "{}",
     "return-type": "json",
     "exec": "bun ~/.config/waybar/prayer/prayer.cjs",
-    "interval": 150,
+    "interval": 60,
     "on-click": "bun ~/.config/waybar/prayer/prayer.cjs"
   },
 
@@ -93,9 +102,30 @@
 
   "clock": {
     "format": "{:L%a %d %b - %H:%M}",
-    "format-alt": "{:L%d %B W%V %Y}",
-    "tooltip-format": "love u ♥ "
+    "return-type": "json",
+    "tooltip-format": "{:%c}",
+    "tooltip": true,
+    "on-click": "xdg-open https://calendar.google.com"
   },
+
+  "custom/calendar": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "~/.config/waybar/calendar_hover.sh",
+    "interval": 3600,
+    "tooltip": true,
+    "on-click": "xdg-open https://calendar.google.com"
+  },
+
+  "custom/workday_progress": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "~/.config/waybar/workday_progress.sh",
+    "interval": 500,
+    "tooltip": true,
+    "on-click": "xdg-open https://calendar.google.com"
+  },
+
   "network": {
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     "format": "{icon}",
