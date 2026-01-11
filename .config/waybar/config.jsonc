@@ -1,28 +1,12 @@
 {
-  "reload_style_on_change": true,
-  "layer": "top",
+  "layer": "bottom",
   "position": "top",
   "spacing": 0,
-  "height": 26,
+  "height": 22,
 
-  "modules-left": ["custom/archi-btn", "cpu", "memory", "custom/prayer"],
+  "modules-left": ["cpu", "memory", "custom/prayer"],
   "modules-center": ["hyprland/workspaces"],
-  "modules-right": [
-    "group/tray-expander",
-    "bluetooth",
-    "network",
-    "pulseaudio",
-    "battery",
-    "clock",
-    "custom/calendar",
-    "custom/workday_progress"
-  ],
-
-  "custom/archi-btn": {
-    "format": "󰣇 ",
-    "on-click": "walker",
-    "on-click-right": "xdg-terminal-exec"
-  },
+  "modules-right": ["group/tray-expander", "bluetooth", "network", "pulseaudio", "battery", "clock", "custom/calendar"],
 
   "cpu": {
     "interval": 3,
@@ -69,7 +53,7 @@
     "return-type": "json",
     "exec": "bun ~/.config/waybar/prayer/prayer.cjs",
     "interval": 60,
-    "on-click": "bun ~/.config/waybar/prayer/prayer.cjs"
+    "on-click": "xdg-open https://www.holyquranradio.com"
   },
 
   "hyprland/workspaces": {
@@ -113,15 +97,6 @@
     "return-type": "json",
     "exec": "~/.config/waybar/calendar_hover.sh",
     "interval": 3600,
-    "tooltip": true,
-    "on-click": "xdg-open https://calendar.google.com"
-  },
-
-  "custom/workday_progress": {
-    "format": "{}",
-    "return-type": "json",
-    "exec": "~/.config/waybar/workday_progress.sh",
-    "interval": 500,
     "tooltip": true,
     "on-click": "xdg-open https://calendar.google.com"
   },
