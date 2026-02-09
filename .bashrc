@@ -2,12 +2,8 @@
 # ~/.bashrc
 #
 
-export PATH="$HOME/.local/archi/bin:$PATH" # archi scripts
-
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
-
-source /usr/share/git/completion/git-prompt.sh
 
 PS1='\[\e[35m\]\u@\h\[\e[m\] \[\e[34m\]\w\[\e[m\] λ '
 
@@ -50,11 +46,11 @@ alias zed='zeditor'
 alias ports='ss -tulpn'
 
 # ======= PATHs =======
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 
-export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
+export PATH="$HOME/.bun/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
 
 # ======= conda initialize =======
 conda() {
