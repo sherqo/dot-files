@@ -5,7 +5,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-PS1='\[\e[35m\]\u@\h\[\e[m\] \[\e[34m\]\w\[\e[m\] λ '
+PS1='\[\e[35m\]\u@\h\[\e[m\] \[\e[34m\]\w\[\e[m\] '
 
 # ============== history ==============
 shopt -s histappend
@@ -58,3 +58,8 @@ conda() {
   source /opt/miniforge/etc/profile.d/conda.sh
   conda "$@"
 }
+
+# ======= extras =======
+
+# OpenClaw Completion
+source "/home/sharqawycs/.openclaw/completions/openclaw.bash"
