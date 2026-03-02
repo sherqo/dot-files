@@ -21,11 +21,11 @@ source /usr/share/fzf/completion.bash
 
 # ============== aliases ==============
 # eza & zoxide
-alias _ls="ls"                                                       # backup default ls
+alias _ls="command ls"                                                       # backup default ls
 alias ls="eza -l  --icons=always --header --group-directories-first" # long listing
 alias la="eza -la --icons=always --header --group-directories-first" # include hidden files
 alias lt="eza -T --level=3 --git --icons=always"                     # tree view
-alias _cd="cd"                                                       # backup default cd
+alias _cd="command cd"                                                       # backup default cd
 alias cd='z'                                                         # replaces default cd
 alias ..='z ..'                                                      # go up 1 directory
 alias ...='z ../..'                                                  # go up 2 directories
