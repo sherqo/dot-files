@@ -4,7 +4,7 @@
   "spacing": 0,
   "height": 22,
 
-  "modules-left": ["cpu", "memory", "custom/prayer"],
+  "modules-left": ["cpu", "memory", "custom/prayer", "mpris"],
   "modules-center": ["hyprland/workspaces"],
   "modules-right": ["group/tray-expander", "bluetooth", "network", "pulseaudio", "battery", "clock", "custom/calendar"],
 
@@ -22,10 +22,10 @@
       "███████░░░",
       "████████░░",
       "█████████░",
-      "██████████"
+      "██████████",
     ],
     "tooltip": true,
-    "on-click": "xdg-terminal-exec btop"
+    "on-click": "xdg-terminal-exec btop",
   },
 
   "memory": {
@@ -42,10 +42,10 @@
       "███████░░░",
       "████████░░",
       "█████████░",
-      "██████████"
+      "██████████",
     ],
     "tooltip": true,
-    "on-click": "xdg-terminal-exec btop"
+    "on-click": "xdg-terminal-exec btop",
   },
 
   "custom/prayer": {
@@ -53,24 +53,23 @@
     "return-type": "json",
     "exec": "bun ~/.config/waybar/prayer/prayer.cjs",
     "interval": 60,
-    "on-click": "xdg-open https://www.holyquranradio.com"
+    "on-click": "xdg-open https://www.holyquranradio.com",
   },
 
   "hyprland/workspaces": {
     "format": "{icon}",
     "format-icons": {
-      "default": "◆",
-      "1": "◇",
-      "2": "◇",
-      "3": "◇",
-      "4": "◇",
-      "5": "◇",
-      "6": "◇",
-      "7": "△",
-      "8": "△",
-      "9": "△",
-      "10": "△",
-      "active": "◆"
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "active": "■",
     },
     "persistent-workspaces": {
       "1": [],
@@ -78,10 +77,10 @@
       "3": [],
 
       "9": [],
-      "10": []
+      "10": [],
     },
     "on-click": "activate",
-    "tooltip": true
+    "tooltip": true,
   },
 
   "clock": {
@@ -89,7 +88,7 @@
     "return-type": "json",
     "tooltip-format": "{:%c}",
     "tooltip": true,
-    "on-click": "xdg-open https://calendar.google.com"
+    "on-click": "xdg-open https://calendar.google.com",
   },
 
   "custom/calendar": {
@@ -98,7 +97,7 @@
     "exec": "~/.config/waybar/calendar_hover.sh",
     "interval": 3600,
     "tooltip": true,
-    "on-click": "xdg-open https://calendar.google.com"
+    "on-click": "xdg-open https://calendar.google.com",
   },
 
   "network": {
@@ -112,7 +111,7 @@
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
     "spacing": 1,
-    "on-click": "xdg-terminal-exec impala"
+    "on-click": "xdg-terminal-exec impala",
   },
   "battery": {
     "format": "{capacity}% {icon}",
@@ -121,7 +120,7 @@
     "format-plugged": "",
     "format-icons": {
       "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
-      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
     },
     "format-full": "󰂅",
     "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
@@ -129,15 +128,15 @@
     "interval": 300,
     "states": {
       "warning": 20,
-      "critical": 10
-    }
+      "critical": 10,
+    },
   },
   "bluetooth": {
     "format": "",
     "format-disabled": "󰂲",
     "format-connected": "",
     "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "xdg-terminal-exec bluetui"
+    "on-click": "xdg-terminal-exec bluetui",
   },
   "pulseaudio": {
     "format": "{icon}",
@@ -145,26 +144,33 @@
     "on-click-right": "pamixer -t",
     "tooltip-format": "Playing at {volume}%",
     "scroll-step": 5,
-    "format-muted": "",
+    "headphone": "",
     "format-icons": {
-      "default": ["", "", ""]
-    }
+      "format-muted": "",
+      "default": ["", "", ""],
+    },
   },
   "group/tray-expander": {
     "orientation": "inherit",
     "drawer": {
       "transition-duration": 100,
-      "children-class": "tray-group-item"
+      "children-class": "tray-group-item",
     },
-    "modules": ["custom/expand-icon", "tray"]
+    "modules": ["custom/expand-icon", "tray"],
   },
   "custom/expand-icon": {
     "format": "󰞗",
-    "tooltip": false
+    "tooltip": false,
   },
 
-  "tray": {
-    "icon-size": 12,
-    "spacing": 17
-  }
+  "mpris": {
+    "dynamic-order": ["title", "artist"],
+    "format": " | {player_icon} {dynamic} | ",
+    "format-paused": " | ⏸ {dynamic} | ",
+    "dynamic-len": 40,
+    "player-icons": {
+      "default": "▶",
+      "spotify": "",
+    },
+  },
 }

@@ -30,7 +30,12 @@ alias cd='z'                                                         # replaces 
 alias ..='z ..'                                                      # go up 1 directory
 alias ...='z ../..'                                                  # go up 2 directories
 alias ....='z ../../..'                                              # go up 3 directories
-eval "$(zoxide init bash)"
+# eval "$(zoxide init bash)"
+_zoxide_cache="$HOME/.cache/zoxide_init.sh"
+if [[ ! -f "$_zoxide_cache" ]]; then
+    zoxide init bash > "$_zoxide_cache"
+fi
+source "$_zoxide_cache"
 
 # grep
 alias grep='grep --color=auto'
@@ -48,9 +53,7 @@ alias ports='ss -tulpn'
 # ======= PATHs =======
 export PATH="$HOME/bin:$PATH"
 
-export PATH="$HOME/.bun/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
-export PATH="$HOME/go/bin:$PATH"
 
 # ======= conda initialize =======
 conda() {
@@ -62,4 +65,11 @@ conda() {
 # ======= extras =======
 
 # OpenClaw Completion
-source "/home/sharqawycs/.openclaw/completions/openclaw.bash"
+source "$HOME/.openclaw/completions/openclaw.bash"
+
+# thefuck
+_thefuck_cache="$HOME/.cache/thefuck_init.sh"
+if [[ ! -f "$_thefuck_cache" ]]; then
+    thefuck --alias > "$_thefuck_cache"
+fi
+source "$_thefuck_cache"
