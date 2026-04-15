@@ -3,8 +3,8 @@
 # ---- week number ----
 week=$(date +%V)
 
-# ---- month calendar (julian days) ----
-month=$(cal -j)
+# ---- month calendar ----
+month=$(cal --iso -m)
 
 # ---- year dots ----
 day=$(date +%j)   # day of year

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const { exec } = require('child_process');
 const { PrayerTimes, Coordinates, CalculationMethod } = require('adhan');
 
 const coords = new Coordinates(30.0444, 31.2357);
@@ -26,11 +27,37 @@ const f = times.fajr.getTime(),
 const isAwake = n >= f && n < m;
 const status = isAwake ? `${Math.round(((n - f) / (m - f)) * 100)}%` : 'sleep';
 
+const stateFile = '/tmp/waybar-prayer-notification-state.json';
+let lastAlert = null;
+try {
+  const raw = fs.readFileSync(stateFile, 'utf8');
+  lastAlert = JSON.parse(raw).alert || null;
+} catch (err) {
+  lastAlert = null;
+}
+
+const quote = s => `'${s.replace(/'/g, "'\"'\"'")}'`;
+const notify = (title, message) => {
+  exec(`notify-send -u critical ${quote(title)} ${quote(message)}`);
+  exec('paplay /usr/share/sounds/freedesktop/stereo/complete.oga >/dev/null 2>&1');
+};
+
+if (mins === 15 && nextDate) {
+  const alertId = `${next}-${nextDate.toISOString().slice(0, 16)}`;
+  if (alertId !== lastAlert) {
+    try {
+      fs.writeFileSync(stateFile, JSON.stringify({ alert: alertId }));
+    } catch (err) {}
+    notify(`15 minutes until ${next}`, `${next} prayer starts at ${fmtTime(nextDate)}`);
+  }
+}
+
 console.log(
   JSON.stringify({
     text: `${status} | ${next} in ${fmt}`,
     tooltip: order.map(p => `${p}: ${fmtTime(times[p.toLowerCase()])}`).join('\n'),
-    class: 'prayer',
+    class: `prayer${mins === 15 ? ' urgent' : ''}`,
     isAwake,
+    urgent: mins === 15,
   })
 );

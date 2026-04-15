@@ -4,7 +4,7 @@
   "spacing": 0,
   "height": 22,
 
-  "modules-left": ["cpu", "memory", "custom/prayer", "mpris"],
+  "modules-left": ["cpu", "memory", "custom/prayer", "custom/timer", "mpris"],
   "modules-center": ["hyprland/workspaces"],
   "modules-right": ["group/tray-expander", "bluetooth", "network", "pulseaudio", "battery", "clock", "custom/calendar"],
 
@@ -94,7 +94,7 @@
   "custom/calendar": {
     "format": "{}",
     "return-type": "json",
-    "exec": "~/.config/waybar/calendar_hover.sh",
+    "exec": "~/.config/waybar/scripts/calendar_hover.sh",
     "interval": 3600,
     "tooltip": true,
     "on-click": "xdg-open https://calendar.google.com",
@@ -172,5 +172,18 @@
       "default": "▶",
       "spotify": "",
     },
+  },
+
+  "custom/timer": {
+    "exec": "~/.config/waybar/scripts/timer.sh",
+    "return-type": "json",
+    "format": " | {}",
+    "on-click": "~/.config/waybar/scripts/timer.sh click",
+    "on-click-right": "~/.config/waybar/scripts/timer.sh right",
+    "on-click-middle": "~/.config/waybar/scripts/timer.sh middle",
+    "on-scroll-up": "~/.config/waybar/scripts/timer.sh down",
+    "on-scroll-down": "~/.config/waybar/scripts/timer.sh up",
+    "tooltip": true,
+    "escape": true,
   },
 }
