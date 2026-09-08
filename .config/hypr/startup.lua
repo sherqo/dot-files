@@ -8,9 +8,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hypridle")
 
     -- Cursor setup
-    hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme BreezeX-RosePine-Linux")
-    hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-size 16")
-    hl.exec_cmd("hyprctl setcursor BreezeX-RosePine-Linux 16")
+    -- hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme BreezeX-RosePine-Linux")
+    -- hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-size 16")
+    -- hl.exec_cmd("hyprctl setcursor BreezeX-RosePine-Linux 16")
     
     -- fix screen sharing after xdg-desktop-portal 1.22 
     hl.exec_cmd("/usr/lib/xdg-desktop-portal &")
