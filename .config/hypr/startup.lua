@@ -1,7 +1,7 @@
 -- startup.lua
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("swaybg -i ~/media/img/wallpapers/big-skeleton-girl.png -m fill")
+    hl.exec_cmd("swaybg -i ~/media/img/wallpapers/wallhaven-y8vlyk.jpg -m fill")
     hl.exec_cmd("waybar")
     hl.exec_cmd("wl-paste --watch clipvault store")
     hl.exec_cmd("swayosd-server")
