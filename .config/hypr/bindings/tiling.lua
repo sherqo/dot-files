@@ -5,8 +5,7 @@ local function d(desc) return { description = desc } end
 -- ─── Close windows ─────────────────────────────────────────────────────────
 hl.bind("SUPER + Q",         hl.dsp.window.close(),                      d("Close active window"))
 hl.bind("SUPER + CTRL + Q",  hl.dsp.window.kill(),                       d("Force kill active window"))
-hl.bind("SUPER + W",         hl.dsp.send_shortcut({ mods = "CTRL", key = "W" }), d("Close tab"))
-
+hl.bind("SUPER + W", hl.dsp.send_shortcut({ mods = "CTRL", key = "W" }), { repeating = true, desc = "Close tab" })
 -- ─── Tiling control ────────────────────────────────────────────────────────
 hl.bind("SUPER + SHIFT + L", hl.dsp.window.float({ action = "toggle" }), d("Toggle floating/tiling"))
 hl.bind("SUPER + F",         hl.dsp.window.fullscreen({ mode = 0 }),     d("Fullscreen"))

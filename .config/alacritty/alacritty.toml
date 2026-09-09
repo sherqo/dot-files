@@ -1,5 +1,5 @@
 [env]
-TERM = "xterm-256color"  
+TERM = "xterm-256color"
 
 [font]
 normal = { family = "CaskaydiaMono Nerd Font", style = "Regular" }
@@ -8,8 +8,8 @@ italic = { family = "CaskaydiaMono Nerd Font", style = "Italic" }
 size = 10
 
 [window]
-padding.x = 14
-padding.y = 14
+padding.x = 7
+padding.y = 7
 decorations = "None"
 opacity = 0.8
 
