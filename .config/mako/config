@@ -1,26 +1,30 @@
-default-timeout=5000
+# Base settings
+background-color=#202330
+text-color=#FFF0F5
+border-color=#FF4C7A
+border-size=1
+border-radius=5
+padding=10
+default-timeout=8000
 
-# Colors
-background-color=#1e2127
-text-color=#c8cddd
-border-color=#3a3f4d
-progress-color=over #89ddff
+# Format & Spacing
+format=<b>%s</b>\n\n%b
 
+# Urgency overrides
 [urgency=low]
-border-color=#3a3f4d
+border-color=#565970
+default-timeout=4000
 
 [urgency=normal]
-border-color=#5c6579
+border-color=#FF4C7A
+default-timeout=8000
 
 [urgency=critical]
-default-timeout=5000000
-background-color=#d0679d
-text-color=#ffffff
-border-color=#ff80b3
-progress-color=over #ffffff
+border-color=#FF7F9D
+default-timeout=60000
 
-# Font & window
-font="CaskaydiaMono Nerd Font 10"
-padding=14
-border-size=1
-border-radius=6
+# Window styling
+font=CaskaydiaMono Nerd Font 10
+width=300
+height=100
+margin=10

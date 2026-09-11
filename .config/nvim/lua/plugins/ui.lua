@@ -87,24 +87,143 @@ require('which-key').setup {
 }
 
 -- Colorscheme
-vim.pack.add { gh 'folke/tokyonight.nvim' }
+
+-- NOTE:------------ tokyonight start ----------------- 
+
+-- vim.pack.add { gh 'folke/tokyonight.nvim' }
 ---@diagnostic disable-next-line: missing-fields
-require('tokyonight').setup {}
-vim.cmd.colorscheme 'tokyonight-night'
+-- require('tokyonight').setup {}
+-- vim.cmd.colorscheme 'tokyonight-night'
+----------------- tokyonight end ----------------- 
+
+-- NOTE:----------- terminal theme start ---------------
+vim.o.termguicolors = true
+vim.o.background = 'dark'
+vim.cmd.colorscheme 'default'
+
+local colors = {
+  bg        = '#202330',
+  fg        = '#FFF0F5',
+  black     = '#202330',
+  red       = '#FF4C7A',
+  green     = '#3BC089',
+  yellow    = '#D0963A',
+  blue      = '#6767CE',
+  magenta   = '#C77DFF',
+  cyan      = '#4CC9C0',
+  white     = '#FFF0F5',
+  gray      = '#565970',
+  brred     = '#FF7F9D',
+  brgreen   = '#9CD162',
+  bryellow  = '#FEC831',
+  brblue    = '#A2C2EB',
+  brmagenta = '#E6A1FF',
+  brcyan    = '#75E0D6',
+}
+
+local hl = vim.api.nvim_set_hl
+
+-- Core syntax
+hl(0, 'Comment',      { fg = colors.gray, italic = true })
+hl(0, 'String',       { fg = colors.green })
+hl(0, 'Character',    { fg = colors.green })
+hl(0, 'Number',       { fg = colors.brmagenta })
+hl(0, 'Boolean',      { fg = colors.brmagenta })
+hl(0, 'Function',     { fg = colors.brcyan })
+hl(0, 'Keyword',      { fg = colors.blue })
+hl(0, 'Statement',    { fg = colors.blue })
+hl(0, 'Conditional',  { fg = colors.blue })
+hl(0, 'Repeat',       { fg = colors.blue })
+hl(0, 'Operator',     { fg = colors.fg })
+hl(0, 'Constant',     { fg = colors.magenta })
+hl(0, 'Type',         { fg = colors.yellow })
+hl(0, 'Identifier',   { fg = colors.fg })
+hl(0, 'PreProc',      { fg = colors.cyan })
+hl(0, 'Special',      { fg = colors.brred })
+hl(0, 'Error',        { fg = colors.red, bold = true })
+hl(0, 'Todo',         { fg = colors.bg, bg = colors.bryellow, bold = true })
+
+-- Diagnostics
+hl(0, 'DiagnosticError', { fg = colors.red })
+hl(0, 'DiagnosticWarn',  { fg = colors.yellow })
+hl(0, 'DiagnosticInfo',  { fg = colors.blue })
+hl(0, 'DiagnosticHint',  { fg = colors.cyan })
+
+-- UI
+hl(0, 'CursorLine',   { bg = colors.dim and colors.dim.black or '#15171F' })
+hl(0, 'Visual',       { bg = '#472541' })   -- matches your selection.background
+hl(0, 'Search',       { fg = colors.bg, bg = colors.brmagenta })
+hl(0, 'IncSearch',    { fg = colors.bg, bg = colors.red })
+hl(0, 'Pmenu',        { fg = colors.fg, bg = '#15171F' })
+hl(0, 'PmenuSel',     { fg = colors.bg, bg = colors.brcyan })
+hl(0, 'MatchParen',   { fg = colors.bryellow, bold = true })
+
+-- indent-blankline
+hl(0, 'IblScope',  { fg = colors.gray })
+hl(0, 'IblIndent', { fg = '#3a3d4a' })
+
+-- Transparency (kept from your original)
+local transparent_groups = {
+  'Normal',
+  'NormalNC',
+  'NormalFloat',
+  'FloatBorder',
+  'SignColumn',
+  'EndOfBuffer',
+}
+
+for _, group in ipairs(transparent_groups) do
+  hl(0, group, { bg = 'NONE' })
+end
+
+hl(0, 'LineNr',       { fg = colors.gray, bg = 'NONE' })
+hl(0, 'CursorLineNr', { fg = colors.brmagenta, bg = 'NONE', bold = true })
+----------------- terminal theme end -----------------
 
 -- todo-comments
 vim.pack.add { gh 'folke/todo-comments.nvim' }
 require('todo-comments').setup {}
 
--- devicons + lualine
+-- devicons
 vim.pack.add { gh 'nvim-tree/nvim-web-devicons' }
 
+-- lualine
 vim.pack.add { gh 'nvim-lualine/lualine.nvim' }
+
 require('lualine').setup {
   options = {
-    theme = 'auto', -- was 'tokyonight', now auto (follows active colorscheme)
+    theme = 'auto',
     icons_enabled = vim.g.have_nerd_font,
     component_separators = { left = '│', right = '│' },
     section_separators = { left = '', right = '' },
   },
+  sections = {
+    lualine_c = { { 'filename', path = 1 } },
+    lualine_x = { 'hostname', 'filetype', 'fileformat' },
+  },
+  inactive_sections = {
+    lualine_b = { 'diff' },
+  },
 }
+
+-- top right clock
+vim.api.nvim_set_hl(0, 'Clock', { fg = '#75E0D6', bg = '#202330' })
+local buf = vim.api.nvim_create_buf(false, true)
+
+local win = vim.api.nvim_open_win(buf, false, {
+  relative = 'editor', width = 5, height = 1,
+  row = 0, col = vim.o.columns - 5,
+  style = 'minimal', border = 'none', focusable = false
+})
+
+vim.wo[win].winhl = 'Normal:Clock'
+
+local timer = vim.uv.new_timer()
+if timer then
+  timer:start(0, 1000, vim.schedule_wrap(function()
+    if vim.api.nvim_win_is_valid(win) then
+      vim.api.nvim_buf_set_lines(buf, 0, -1, false, { tostring(os.date('%H:%M')) })
+    end
+  end))
+end
+

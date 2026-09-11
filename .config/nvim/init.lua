@@ -1,6 +1,4 @@
--- init.lua - Modular entry point
--- Original single-file content (687 lines) split into lua/config/* and lua/plugins/*
--- Backup of original is at init.lua.single.bak
+-- init.lua
 
 -- 1. Options must come first (sets mapleader before any plugins use it)
 require 'config.options'
