@@ -13,6 +13,9 @@ require 'plugins.ui'
 -- 3b. File explorer (nvim-tree, restored from bak)
 require 'plugins.explorer'
 
+-- 3c. Image preview via chafa (Alacritty-safe ANSI, no kitty/sixel)
+require 'plugins.image-preview'
+
 -- 3c. Editing helpers (autopairs, indent-blankline, restored from bak)
 require 'plugins.editing'
 
