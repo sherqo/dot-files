@@ -144,6 +144,42 @@ vim.api.nvim_create_user_command('ChafaPreview', function(opts)
   M.open_float(opts.args ~= '' and opts.args or vim.api.nvim_buf_get_name(0))
 end, { nargs = '?', complete = 'file', desc = 'Preview image with chafa in a float' })
 
+-- Telescope mime_hook: chafa preview inside telescope's preview pane.
+-- Called by telescope only for non-text files; the is_image guard keeps
+-- videos/archives/etc. on the default "binary cannot be previewed" path.
+-- Uses nvim_open_term + jobstart so ANSI colors render (plain buf_set_lines
+-- would show escape codes as garbage). Size comes from the actual preview
+-- window so the image isn't distorted.
+---@param filepath string
+---@param bufnr integer
+---@param opts table|nil
+function M.telescope_mime_hook(filepath, bufnr, opts)
+  if not M.is_image(filepath) then
+    return
+  end
+  if vim.fn.executable('chafa') ~= 1 then
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { 'chafa not found on PATH' })
+    return
+  end
+  local abs = vim.fn.fnamemodify(filepath, ':p')
+  local width, height = 80, 40
+  local winid = opts and opts.winid
+  if winid ~= nil and vim.api.nvim_win_is_valid(winid) then
+    width = math.max(vim.api.nvim_win_get_width(winid) - 2, 10)
+    height = math.max(vim.api.nvim_win_get_height(winid) - 2, 10)
+  end
+  local term = vim.api.nvim_open_term(bufnr, {})
+  vim.fn.jobstart({ 'chafa', '--size', width .. 'x' .. height, abs }, {
+    stdout_buffered = true,
+    pty = true,
+    on_stdout = function(_, data, _)
+      for _, line in ipairs(data) do
+        pcall(vim.api.nvim_chan_send, term, line .. '\r\n')
+      end
+    end,
+  })
+end
+
 local group = vim.api.nvim_create_augroup('image-preview', { clear = true })
 
 vim.api.nvim_create_autocmd('BufReadCmd', {

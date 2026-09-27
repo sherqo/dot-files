@@ -20,6 +20,15 @@ telescope.setup {
   extensions = {
     ['ui-select'] = { require('telescope.themes').get_dropdown() },
   },
+  defaults = {
+    preview = {
+      -- Binary files (images) render via chafa; plain text uses default preview.
+      -- Alacritty-safe: chafa emits ANSI colored text, no kitty/sixel needed.
+      mime_hook = function(filepath, bufnr, opts)
+        require('plugins.image-preview').telescope_mime_hook(filepath, bufnr, opts)
+      end,
+    },
+  },
 }
 
 pcall(telescope.load_extension, 'fzf')
