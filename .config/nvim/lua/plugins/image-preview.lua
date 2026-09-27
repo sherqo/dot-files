@@ -1,5 +1,4 @@
 -- Image preview via chafa (Alacritty-safe: ANSI text only, no kitty/sixel)
--- Commit 1: detection only. Intercepts image buffers so raw binary is never shown.
 local M = {}
 
 -- Extensions we treat as images (must match chafa-supported raster formats)
@@ -31,24 +30,119 @@ function M.is_image(path)
   return ext ~= nil and M.extensions[ext] == true
 end
 
--- Placeholder handler: blocks the default binary read.
--- The real chafa render lands in Commit 2 (M.render).
+-- Placeholder handler: blocks the default binary read + renders via chafa.
+-- Uses :terminal-style rendering (termopen) so ANSI colors show correctly.
+-- A plain buffer cannot render ANSI colors; a terminal buffer can.
 ---@param buf integer
 ---@param filepath string
-function M.intercept(buf, filepath)
-  vim.bo[buf].buftype = 'nofile'
+function M.render(buf, filepath)
+  local abs = vim.fn.fnamemodify(filepath, ':p')
+  if vim.fn.executable('chafa') ~= 1 then
+    vim.bo[buf].buftype = 'nofile'
+    vim.bo[buf].swapfile = false
+    vim.bo[buf].bufhidden = 'wipe'
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, {
+      'chafa not found on PATH. Install chafa to preview images.',
+    })
+    return
+  end
+  if vim.fn.filereadable(abs) ~= 1 then
+    vim.notify('Image not readable: ' .. abs, vim.log.levels.ERROR)
+    return
+  end
+  -- Remember source path for resize re-render
+  vim.b[buf].image_path = abs
+  -- Make sure termopen runs in this buffer
+  if vim.api.nvim_get_current_buf() ~= buf then
+    vim.api.nvim_set_current_buf(buf)
+  end
   vim.bo[buf].swapfile = false
   vim.bo[buf].bufhidden = 'wipe'
   vim.bo[buf].modifiable = true
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, {
-    'Image preview: ' .. vim.fn.fnamemodify(filepath, ':t'),
-    '',
-    '(chafa render lands here in commit 2)',
+  vim.bo[buf].readonly = false
+  -- Responsive size: match the actual window showing this buffer
+  local width = vim.fn.winwidth(0)
+  local height = vim.fn.winheight(0)
+  -- Leave one row for the terminal prompt/status so chafa isn't clipped
+  width = math.max(width - 2, 10)
+  height = math.max(height - 2, 10)
+  local size = width .. 'x' .. height
+  -- Clear buffer, then run chafa inside a terminal (handles ANSI colors)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, {})
+  local ok, job = pcall(vim.fn.termopen, { 'chafa', '--size', size, abs }, {
+    on_exit = function()
+      -- Keep buffer read-only-ish; terminal is already finished
+      if vim.api.nvim_buf_is_valid(buf) then
+        vim.bo[buf].filetype = 'image-preview'
+        vim.b[buf].image_path = abs
+      end
+    end,
   })
-  vim.bo[buf].modifiable = false
-  vim.bo[buf].readonly = true
+  if not ok or job == nil or job == 0 then
+    -- Headless / no-terminal fallback: plain chafa text (no colors, but no crash)
+    local out = vim.fn.system({ 'chafa', '--size', size, abs })
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(out, '\n'))
+  end
   vim.bo[buf].filetype = 'image-preview'
+  -- Clean view: no line numbers/gutter in the preview window
+  local win = vim.fn.bufwinid(buf)
+  if win ~= -1 then
+    vim.wo[win].number = false
+    vim.wo[win].relativenumber = false
+    vim.wo[win].signcolumn = 'no'
+    vim.wo[win].cursorline = false
+  end
+  -- q closes the preview buffer
+  vim.keymap.set('n', 'q', '<cmd>bdelete<CR>', { buffer = buf, silent = true, desc = 'Close image preview' })
 end
+
+M.intercept = M.render
+
+-- Floating variant: `chafa` inside a centered float (ANSI colors via terminal).
+-- Size is derived from the actual float dimensions so the image isn't distorted.
+---@param filepath string
+function M.open_float(filepath)
+  local abs = vim.fn.fnamemodify(filepath, ':p')
+  if not M.is_image(abs) then
+    vim.notify('Not an image: ' .. filepath, vim.log.levels.WARN)
+    return
+  end
+  if vim.fn.executable('chafa') ~= 1 then
+    vim.notify('chafa not found on PATH', vim.log.levels.ERROR)
+    return
+  end
+  local cols = vim.o.columns
+  local lines = vim.o.lines
+  local win_w = math.floor(cols * 0.8)
+  local win_h = math.floor(lines * 0.8)
+  local row = math.floor((lines - win_h) / 2)
+  local col = math.floor((cols - win_w) / 2)
+  local buf = vim.api.nvim_create_buf(false, true)
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = 'editor',
+    width = win_w,
+    height = win_h,
+    row = row,
+    col = col,
+    style = 'minimal',
+    border = 'rounded',
+    title = ' ' .. vim.fn.fnamemodify(abs, ':t') .. ' ',
+    title_pos = 'center',
+  })
+  vim.wo[win].number = false
+  vim.wo[win].relativenumber = false
+  vim.wo[win].signcolumn = 'no'
+  local size = (win_w - 2) .. 'x' .. (win_h - 2)
+  vim.fn.termopen({ 'chafa', '--size', size, abs })
+  vim.bo[buf].filetype = 'image-preview'
+  vim.b[buf].image_path = abs
+  vim.keymap.set({ 'n', 't' }, 'q', '<cmd>bdelete<CR>', { buffer = buf, silent = true, desc = 'Close image preview' })
+  vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { buffer = buf, silent = true })
+end
+
+vim.api.nvim_create_user_command('ChafaPreview', function(opts)
+  M.open_float(opts.args ~= '' and opts.args or vim.api.nvim_buf_get_name(0))
+end, { nargs = '?', complete = 'file', desc = 'Preview image with chafa in a float' })
 
 local group = vim.api.nvim_create_augroup('image-preview', { clear = true })
 
@@ -59,6 +153,18 @@ vim.api.nvim_create_autocmd('BufReadCmd', {
   callback = function(ev)
     -- ev.file may be relative; keep it for display + later absolute resolve
     M.intercept(ev.buf, ev.file ~= '' and ev.file or ev.match)
+  end,
+})
+
+-- Re-render at the new window size after a resize (chafa output is static)
+vim.api.nvim_create_autocmd({ 'VimResized', 'WinResized' }, {
+  group = group,
+  desc = 'Re-render chafa image preview after resize',
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    if vim.bo[buf].filetype == 'image-preview' and vim.b[buf].image_path then
+      M.render(buf, vim.b[buf].image_path)
+    end
   end,
 })
 
