@@ -4,11 +4,22 @@
 -- If you're NOT using uwsm, these are fine here.
 
 -- Cursor
-hl.env("XCURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_SIZE", "24")
-hl.env("QT_CURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_THEME", "rose-pine-hyprcursor")
-hl.env("XCURSOR_THEME", "BreezeX-RosePine-Linux")
+-- hl.env("XCURSOR_SIZE", "22")
+-- hl.env("HYPRCURSOR_SIZE", "22")
+-- hl.env("QT_CURSOR_SIZE", "22")
+-- hl.env("HYPRCURSOR_THEME", "rose-pine-hyprcursor")
+-- hl.env("XCURSOR_THEME", "BreezeX-RosePine-Linux")
+-- hl.env("HYPRCURSOR_THEME", "macOS-hypr")
+-- hl.env("XCURSOR_THEME", "macOS-hypr")
+-- hl.env("QT_CURSOR_THEME", "macOS-hypr")
+
+hl.env("XCURSOR_SIZE", "22")
+hl.env("HYPRCURSOR_SIZE", "22")
+hl.env("QT_CURSOR_SIZE", "22")
+
+hl.env("HYPRCURSOR_THEME", "Adwaita")
+hl.env("XCURSOR_THEME", "Adwaita")
+hl.env("QT_CURSOR_THEME", "Adwaita")
 
 -- Force Wayland
 hl.env("GDK_BACKEND", "wayland")
@@ -35,5 +46,6 @@ hl.env("__VK_LAYER_NV_optimus", "NVIDIA_only")
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 
--- Scaling
+-- Scaling & UI Overrides
 hl.env("GDK_SCALE", "1")
+

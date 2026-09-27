@@ -63,7 +63,7 @@ hl.bind("SUPER + CTRL + comma", function()
 end, d("Toggle DnD notifications"))
 
 -- ─── Screenshots ───────────────────────────────────────────────────────────
-hl.bind("Print",               hl.dsp.exec_cmd("~/bin/cmd-screenshot"),               d("Screenshot with editing"))
+hl.bind("Print",               hl.dsp.exec_cmd("~/bin/cmd-screenshot smart"),               d("Screenshot with editing"))
 hl.bind("SUPER + CTRL + 1",    hl.dsp.exec_cmd("~/bin/cmd-screenshot smart --no-popup"), d("Screenshot (smart, no popup)"))
 hl.bind("SUPER + CTRL + 2",    hl.dsp.exec_cmd("~/bin/cmd-screenshot full"),          d("Screenshot (full)"))
 hl.bind("SUPER + CTRL + 3",    hl.dsp.exec_cmd("~/bin/cmd-screenshot ocr"),           d("Screenshot (OCR)"))

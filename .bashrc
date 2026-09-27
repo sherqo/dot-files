@@ -7,11 +7,15 @@
 
 PS1='\[\e[35m\]\u@\h\[\e[m\] \[\e[34m\]\w\[\e[m\] '
 
-# ============== history ==============
+# ============== Shell & History Settings ==============
 shopt -s histappend
 export HISTSIZE=100000
 export HISTFILESIZE=200000
 export HISTCONTROL=ignoreboth
+
+# Flush history immediately after each command
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
@@ -75,3 +79,4 @@ if [[ ! -f "$_thefuck_cache" ]]; then
     thefuck --alias > "$_thefuck_cache"
 fi
 source "$_thefuck_cache"
+sshy() { [ "$#" -eq 0 ] && { echo "usage: sshy <session>"; return 1; }; command tmux attach -t "$1" 2>/dev/null || command tmux new -s "$1"; }

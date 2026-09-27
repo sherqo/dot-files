@@ -5,7 +5,7 @@
   "spacing": 0,
   "height": 22,
 
-  "modules-left": ["cpu", "memory", "custom/prayer", "custom/timer", "mpris"],
+  "modules-left": ["cpu", "memory", "custom/prayer", "custom/task-timer", "mpris"],
   "modules-center": ["hyprland/workspaces"],
   "modules-right": ["group/tray-expander", "bluetooth", "network", "pulseaudio", "battery", "clock", "custom/calendar"],
 
@@ -174,6 +174,8 @@
       "spotify": "",
     },
   },
+  
+
 
   "custom/timer": {
     "exec": "~/.config/waybar/scripts/timer.sh",
@@ -186,5 +188,17 @@
     "on-scroll-down": "~/.config/waybar/scripts/timer.sh up",
     "tooltip": true,
     "escape": true,
+  },
+
+  "custom/task-timer": {
+    "exec": "~/.config/waybar/scripts/task-timer.sh",
+    "return-type": "json",
+    "format": " | {}",
+    "interval": 1,
+    "on-click": "~/.config/waybar/scripts/task-timer.sh click",
+    "on-click-right": "~/.config/waybar/scripts/task-timer.sh right",
+    "on-scroll-up": "~/.config/waybar/scripts/task-timer.sh up",
+    "on-scroll-down": "~/.config/waybar/scripts/task-timer.sh down",
+    "tooltip": true,
   },
 }

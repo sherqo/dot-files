@@ -1,93 +1,128 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 [[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
 OUTPUT_DIR="${XDG_PICTURES_DIR:-$HOME/media/img}/screenshots"
+
 if [[ ! -d "$OUTPUT_DIR" ]]; then
-  notify-send "Screenshot directory does not exist and will be created: $OUTPUT_DIR" -u critical -t 3000
-  mkdir -p "$OUTPUT_DIR"
+    notify-send "Screenshot directory created" "$OUTPUT_DIR" -t 2000
+    mkdir -p "$OUTPUT_DIR"
 fi
-pkill slurp && exit 0
+
+# Kill active instances if toggled
+pkill slurp && pkill wayfreeze && exit 0
 
 MODE="${1:-smart}"
 SHOW_POPUP=true
 
 case "$MODE" in
-  smart-no-popup|smart-nopup)
-    MODE="smart"
-    SHOW_POPUP=false
-    ;;
+    smart-no-popup|smart-nopup)
+        MODE="smart"
+        SHOW_POPUP=false
+        ;;
 esac
 
 case "${2:-}" in
-  --no-popup|no-popup)
-    SHOW_POPUP=false
-    ;;
+    --no-popup|no-popup)
+        SHOW_POPUP=false
+        ;;
 esac
+
 FILENAME="$OUTPUT_DIR/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png"
 
 get_rectangles() {
-  local active_workspace=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .activeWorkspace.id')
-  hyprctl monitors -j | jq -r --arg ws "$active_workspace" '.[] | select(.activeWorkspace.id == ($ws | tonumber)) | "\(.x),\(.y) \((.width / .scale) | floor)x\((.height / .scale) | floor)"'
-  hyprctl clients -j | jq -r --arg ws "$active_workspace" '.[] | select(.workspace.id == ($ws | tonumber)) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
+    local active_workspace
+    active_workspace=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .activeWorkspace.id')
+    hyprctl monitors -j | jq -r --arg ws "$active_workspace" '.[] | select(.activeWorkspace.id == ($ws | tonumber)) | "\(.x),\(.y) \((.width / .scale) | floor)x\((.height / .scale) | floor)"'
+    hyprctl clients -j | jq -r --arg ws "$active_workspace" '.[] | select(.workspace.id == ($ws | tonumber)) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
+}
+
+# Freeze screen, let user select, capture with grim -g while STILL frozen.
+# grim -g handles Wayland scale conversion internally; cropping a raw
+# grim buffer with convert does not (logical vs physical pixels).
+# Sets globals: SELECTION, and writes the crop straight to $FILENAME.
+capture_selection_frozen() {
+    # Freeze the display using wayfreeze
+    wayfreeze &
+    FREEZE_PID=$!
+
+    trap 'kill $FREEZE_PID 2>/dev/null' EXIT
+
+    sleep 0.05
+    # Select area over the frozen screen (stdin carries highlight rects, if piped)
+    SELECTION=$(slurp "$@" 2>/dev/null)
+
+    if [ -n "$SELECTION" ]; then
+        # Capture while STILL frozen — grim -g handles scale correctly
+        # and the freeze hides the cursor / live updates.
+        grim -g "$SELECTION" "$FILENAME"
+    fi
+
+    kill $FREEZE_PID 2>/dev/null
+    trap - EXIT
+
+    echo "$SELECTION"
 }
 
 case "$MODE" in
-  full)
-    SELECTION=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | "\(.x),\(.y) \((.width / .scale) | floor)x\((.height / .scale) | floor)"')
-    [ -z "$SELECTION" ] && exit 0
-    grim -g "$SELECTION" - | tee "$FILENAME" | wl-copy
-    notify-send "Screenshot" "Full screen saved" -t 2000
-    ;;
+    full)
+        SELECTION=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | "\(.x),\(.y) \((.width / .scale) | floor)x\((.height / .scale) | floor)"')
+        [ -z "$SELECTION" ] && exit 0
+        grim -g "$SELECTION" "$FILENAME"
+        wl-copy < "$FILENAME"
+        notify-send "Screenshot" "Full screen saved to clipboard & file" -t 2000
+        ;;
 
-  ocr)
-    wayfreeze & PID=$!
-    sleep .1
-    SELECTION=$(slurp 2>/dev/null)
-    kill $PID 2>/dev/null
-    [ -z "$SELECTION" ] && exit 0
-    TMPFILE=$(mktemp /tmp/ocr-XXXXXX.png)
-    grim -g "$SELECTION" "$TMPFILE"
-    tesseract "$TMPFILE" stdout | wl-copy
-    rm "$TMPFILE"
-    notify-send "OCR" "Text copied to clipboard" -t 2000
-    ;;
+    ocr)
+        SELECTION=$(capture_selection_frozen)
+        [ -z "$SELECTION" ] && exit 0
 
-  smart|*)
-    RECTS=$(get_rectangles)
-    wayfreeze & PID=$!
-    sleep .1
-    SELECTION=$(echo "$RECTS" | slurp 2>/dev/null)
-    kill $PID 2>/dev/null
-    [ -z "$SELECTION" ] && exit 0
+        tesseract "$FILENAME" stdout | wl-copy
+        rm -f "$FILENAME"
+        notify-send "OCR" "Text copied to clipboard" -t 2000
+        ;;
 
-    if [[ "$SELECTION" =~ ^([0-9]+),([0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]]; then
-      if (( ${BASH_REMATCH[3]} * ${BASH_REMATCH[4]} < 20 )); then
-        click_x="${BASH_REMATCH[1]}"
-        click_y="${BASH_REMATCH[2]}"
-        while IFS= read -r rect; do
-          if [[ "$rect" =~ ^([0-9]+),([0-9]+)[[:space:]]([0-9]+)x([0-9]+) ]]; then
-            rect_x="${BASH_REMATCH[1]}"
-            rect_y="${BASH_REMATCH[2]}"
-            rect_width="${BASH_REMATCH[3]}"
-            rect_height="${BASH_REMATCH[4]}"
-            if (( click_x >= rect_x && click_x < rect_x+rect_width && click_y >= rect_y && click_y < rect_y+rect_height)); then
-              SELECTION="${rect_x},${rect_y} ${rect_width}x${rect_height}"
-              break
+    smart|*)
+        RECTS=$(get_rectangles)
+        SELECTION=$(echo "$RECTS" | capture_selection_frozen)
+        [ -z "$SELECTION" ] && exit 0
+
+        # Fixed Regex to support negative coordinates (-?[0-9]+)
+        if [[ "$SELECTION" =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]]; then
+            if (( ${BASH_REMATCH[3]} * ${BASH_REMATCH[4]} < 25 )); then
+                click_x="${BASH_REMATCH[1]}"
+                click_y="${BASH_REMATCH[2]}"
+                while IFS= read -r rect; do
+                    if [[ "$rect" =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+) ]]; then
+                        rect_x="${BASH_REMATCH[1]}"
+                        rect_y="${BASH_REMATCH[2]}"
+                        rect_width="${BASH_REMATCH[3]}"
+                        rect_height="${BASH_REMATCH[4]}"
+                        if (( click_x >= rect_x && click_x < rect_x+rect_width && click_y >= rect_y && click_y < rect_y+rect_height )); then
+                            SELECTION="${rect_x},${rect_y} ${rect_width}x${rect_height}"
+                            break
+                        fi
+                    fi
+                done <<< "$RECTS"
+                # window click-to-select changed SELECTION — recapture frozen
+                # so we don't grab a live frame (cursor) after unfreezing
+                wayfreeze &
+                FREEZE_PID=$!
+                sleep 0.05
+                grim -g "$SELECTION" "$FILENAME"
+                kill $FREEZE_PID 2>/dev/null
             fi
-          fi
-        done <<< "$RECTS"
-      fi
-    fi
+        fi
 
-    grim -g "$SELECTION" - | tee "$FILENAME" | wl-copy
-    notify-send "Screenshot" "Copied to clipboard & saved" -t 2000
+        wl-copy < "$FILENAME"
+        notify-send "Screenshot" "Copied to clipboard & saved" -t 2000
 
-    if [[ "$SHOW_POPUP" == true ]]; then
-      satty --filename "$FILENAME" \
-        --output-filename "$FILENAME" \
-        --early-exit \
-        --actions-on-enter save-to-clipboard \
-        --save-after-copy \
-        --copy-command 'wl-copy'
-    fi
-    ;;
+        if [[ "$SHOW_POPUP" == true ]]; then
+            satty --filename "$FILENAME" \
+                --output-filename "$FILENAME" \
+                --early-exit \
+                --actions-on-enter save-to-clipboard \
+                --save-after-copy \
+                --copy-command 'wl-copy'
+        fi
+        ;;
 esac

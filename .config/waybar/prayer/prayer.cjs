@@ -18,14 +18,14 @@ if (!next) {
 }
 
 const mins = Math.max(0, Math.floor((nextDate - now) / 6e4));
-const fmt = mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins}m`;
+const fmt = `${Math.floor(mins / 60)}:${mins % 60}`;
 const fmtTime = d => d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
 const f = times.fajr.getTime(),
   m = times.maghrib.getTime(),
   n = now.getTime();
 const isAwake = n >= f && n < m;
-const status = isAwake ? `${Math.round(((n - f) / (m - f)) * 100)}%` : 'sleep';
+const status = isAwake ? `${Math.round(((n - f) / (m - f)) * 100)}%` : 's';
 
 const stateFile = '/tmp/waybar-prayer-notification-state.json';
 let lastAlert = null;
