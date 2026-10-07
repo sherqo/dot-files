@@ -79,4 +79,9 @@ if [[ ! -f "$_thefuck_cache" ]]; then
     thefuck --alias > "$_thefuck_cache"
 fi
 source "$_thefuck_cache"
+
+# sshy for quick tmux sessions
 sshy() { [ "$#" -eq 0 ] && { echo "usage: sshy <session>"; return 1; }; command tmux attach -t "$1" 2>/dev/null || command tmux new -s "$1"; }
+
+# mkdir and cd in a single command
+mkcd() { mkdir -p -- "$1" && _cd -P -- "$1"; }

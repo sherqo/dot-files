@@ -24,8 +24,8 @@ hl.config({
 
     decoration = {
         rounding = 1,
-        inactive_opacity = 0.9,
-        active_opacity = 0.97,
+        inactive_opacity = 0.95,
+        active_opacity = 1,
         blur = {
             enabled = true,
             size = 2,
@@ -123,4 +123,4 @@ hl.animation({ leaf = "layersIn",       enabled = true, speed = 0.1,  bezier = "
 hl.animation({ leaf = "layersOut",      enabled = true, speed = 0.08, bezier = "linear",       style = "fade" })
 hl.animation({ leaf = "fadeLayersIn",   enabled = true, speed = 0.1,  bezier = "almostLinear" })
 hl.animation({ leaf = "fadeLayersOut",  enabled = true, speed = 0.1,  bezier = "almostLinear" })
-hl.animation({ leaf = "workspaces",     enabled = false })
+hl.animation({ leaf = "workspaces",     enabled = false, speed = 0.8,  bezier = "easeOutQuint" })

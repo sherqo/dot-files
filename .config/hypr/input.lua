@@ -5,9 +5,9 @@ hl.config({
         kb_layout = "us, ara(mac)",
         kb_options = "grp:shifts_toggle,caps:escape",
         repeat_rate = 40,
-        repeat_delay = 600,
+        repeat_delay = 250,
         numlock_by_default = true,
-        sensitivity = -1,
+        sensitivity = -0.7,
         natural_scroll = true,
         scroll_factor = 2,
 

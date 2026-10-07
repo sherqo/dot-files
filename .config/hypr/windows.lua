@@ -9,14 +9,20 @@ hl.window_rule({
     no_focus = true,
 })
 
--- LocalSend: float + center
-hl.window_rule({ match = { class = "localsend" }, float = true, center = true })
+-- LocalSend: float + center (matches actual app_id, not the binary name)
+hl.window_rule({ match = { class = "org.localsend.localsend_app" }, float = true, center = true })
 
 -- Satty screenshot tool: float + center
 hl.window_rule({ match = { class = "com.gabm.satty" }, float = true, center = true })
 
 -- Thunar rename dialog: float + center
 hl.window_rule({ match = { title = "Rename.*" }, float = true, center = true })
+
+-- Sherqo control centers: float + centered (predictable; was landing off-screen)
+hl.window_rule({ match = { class = "org.sherqo.ember" }, float = true, center = true, size = { 620, 460 } })
+hl.window_rule({ match = { class = "org.sherqo.bluetui" }, float = true, center = true, size = { 640, 480 } })
+hl.window_rule({ match = { class = "org.sherqo.zephyr" }, float = true, center = true, size = { 660, 520 } })
+hl.window_rule({ match = { class = "org.sherqo.hearth" }, float = true, center = true, size = { 600, 420 } })
 
 -- Picture-in-Picture
 hl.window_rule({ match = { title = "Picture.?in.?[Pp]icture" }, tag = "+pip" })
