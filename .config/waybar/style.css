@@ -31,6 +31,35 @@
   opacity: 0.4;
 }
 
+#language {
+  margin-right: 10px;
+  min-width: 20px;
+}
+
+#privacy {
+  margin-left: 4px;
+}
+
+#privacy-item {
+  margin: 3px 0;
+}
+
+#privacy-item.screenshare {
+  background-color: #FF4C7A;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+#privacy-item.audio-in {
+  background-color: #D9480F;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+#privacy-item image {
+  background-color: transparent;
+}
+
 #battery,
 #pulseaudio {
   min-width: 12px;
