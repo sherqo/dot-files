@@ -7,7 +7,17 @@
 
   "modules-left": ["cpu", "memory", "custom/prayer", "custom/task-timer", "mpris"],
   "modules-center": ["hyprland/workspaces"],
-  "modules-right": ["group/tray-expander", "bluetooth", "network", "pulseaudio", "battery", "clock", "custom/calendar"],
+  "modules-right": [
+    "group/tray-expander",
+    "hyprland/language",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "battery",
+    "clock",
+    "custom/calendar",
+    "privacy",
+  ],
 
   "cpu": {
     "interval": 3,
@@ -81,7 +91,19 @@
       "10": [],
     },
     "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({workspace=\"e+1\"})'",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({workspace=\"e-1\"})'",
     "tooltip": true,
+  },
+
+  "hyprland/language": {
+    "format": "{}",
+    "format-en": "US",
+    "format-us": "US",
+    "format-ar": "AR",
+    "format-ara": "AR",
+    "on-click": "~/.config/waybar/scripts/switch-layout.sh",
+    "tooltip": false,
   },
 
   "clock": {
@@ -112,11 +134,11 @@
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
     "spacing": 1,
-    "on-click": "alacritty --class org.sherqo.zephyr -e zephyr",
+    "on-click": "xdg-terminal-exec --app-id=org.sherqo.zephyr -- /home/sherqo/go/bin/zephyr",
   },
   "battery": {
     "format": "{capacity}% {icon}",
-    "on-click": "alacritty --class org.sherqo.hearth -e hearth",
+    "on-click": "xdg-terminal-exec --app-id=org.sherqo.hearth -- /home/sherqo/go/bin/hearth",
     "format-discharging": "{icon}",
     "format-charging": "{icon}",
     "format-plugged": "",
@@ -138,11 +160,11 @@
     "format-disabled": "󰂲",
     "format-connected": "",
     "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "alacritty --class org.sherqo.bluetui -e bluetui",
+    "on-click": "xdg-terminal-exec --app-id=org.sherqo.bluetui -- /usr/sbin/bluetui",
   },
   "pulseaudio": {
     "format": "{icon}",
-    "on-click": "alacritty --class org.sherqo.ember -e ember",
+    "on-click": "xdg-terminal-exec --app-id=org.sherqo.ember -- /home/sherqo/go/bin/ember",
     "on-click-right": "pamixer -t",
     "tooltip-format": "Playing at {volume}%",
     "scroll-step": 5,
@@ -175,8 +197,6 @@
       "spotify": "",
     },
   },
-  
-
 
   "custom/timer": {
     "exec": "~/.config/waybar/scripts/timer.sh",
@@ -201,5 +221,15 @@
     "on-scroll-up": "~/.config/waybar/scripts/task-timer.sh up",
     "on-scroll-down": "~/.config/waybar/scripts/task-timer.sh down",
     "tooltip": true,
+  },
+
+  "privacy": {
+    "icon-size": 11,
+    "icon-spacing": 4,
+    "transition-duration": 250,
+    "modules": [
+      { "type": "screenshare", "tooltip": true, "icon-name": "screen-shared-symbolic" },
+      { "type": "audio-in", "tooltip": true, "icon-name": "audio-input-microphone-symbolic" },
+    ],
   },
 }
