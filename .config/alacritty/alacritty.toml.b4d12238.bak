@@ -1,0 +1,47 @@
+[env]
+TERM = "xterm-256color"
+
+[font]
+normal = { family = "CaskaydiaMono Nerd Font", style = "Regular" }
+bold = { family = "CaskaydiaMono Nerd Font", style = "Bold" }
+italic = { family = "CaskaydiaMono Nerd Font", style = "Italic" }
+size = 10
+
+[window]
+padding.x = 7
+padding.y = 7
+decorations = "None"
+opacity = 0.9
+
+[keyboard]
+bindings = [
+{ key = "Insert", mods = "Shift", action = "Paste" },
+{ key = "Insert", mods = "Control", action = "Copy" }
+]
+
+# Pink Cat Boo - Alacritty theme
+
+[colors.primary]
+background = "#202330"
+foreground = "#FFF0F5"
+
+[colors.normal]
+black   = "#202330"
+red     = "#FF4C7A"
+green   = "#3BC089"
+yellow  = "#D0963A"
+blue    = "#6767CE"
+magenta = "#C77DFF"
+cyan    = "#4CC9C0"
+white   = "#FFF0F5"
+
+[colors.bright]
+black   = "#565970"
+red     = "#FF7F9D"
+green   = "#9CD162"
+yellow  = "#FEC831"
+blue    = "#A2C2EB"
+magenta = "#E6A1FF"
+cyan    = "#75E0D6"
+white   = "#FFFFFF"
+
