@@ -4,7 +4,7 @@
 OUTPUT_DIR="${XDG_PICTURES_DIR:-$HOME/media/img}/screenshots"
 
 if [[ ! -d "$OUTPUT_DIR" ]]; then
-    notify-send "Screenshot directory created" "$OUTPUT_DIR" -t 2000
+    notify-send -a "Screenshot" -e "Screenshot directory created" "$OUTPUT_DIR" -t 2000
     mkdir -p "$OUTPUT_DIR"
 fi
 
@@ -28,6 +28,20 @@ case "${2:-}" in
 esac
 
 FILENAME="$OUTPUT_DIR/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png"
+
+# Screenshot notification: the image is the icon, clicking it copies the file
+# (again) to the clipboard. Runs in the background so the script never waits.
+notify_screenshot() { # $1 = body text
+    local file="$FILENAME"
+    (
+        action=$(notify-send -a "Screenshot" -u low -i "$file" -A "default=Copy" --wait \
+            "Screenshot" "$1 — click to copy" 2>/dev/null)
+        if [ "$action" = "default" ] && [ -f "$file" ]; then
+            wl-copy < "$file"
+            notify-send -a "Screenshot" -e -i "$file" -t 1500 "Copied" "Screenshot copied to clipboard"
+        fi
+    ) &
+}
 
 get_rectangles() {
     local active_workspace
@@ -69,7 +83,7 @@ case "$MODE" in
         [ -z "$SELECTION" ] && exit 0
         grim -g "$SELECTION" "$FILENAME"
         wl-copy < "$FILENAME"
-        notify-send "Screenshot" "Full screen saved to clipboard & file" -t 2000
+        notify_screenshot "Full screen saved to clipboard & file"
         ;;
 
     ocr)
@@ -78,7 +92,7 @@ case "$MODE" in
 
         tesseract "$FILENAME" stdout | wl-copy
         rm -f "$FILENAME"
-        notify-send "OCR" "Text copied to clipboard" -t 2000
+        notify-send -a "Screenshot" -e -i edit-copy "OCR" "Text copied to clipboard" -t 2000
         ;;
 
     smart|*)
@@ -114,7 +128,7 @@ case "$MODE" in
         fi
 
         wl-copy < "$FILENAME"
-        notify-send "Screenshot" "Copied to clipboard & saved" -t 2000
+        notify_screenshot "Copied to clipboard & saved"
 
         if [[ "$SHOW_POPUP" == true ]]; then
             satty --filename "$FILENAME" \

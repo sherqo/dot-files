@@ -1,0 +1,104 @@
+{
+  "$schema": "/etc/xdg/swaync/configSchema.json",
+  "ignore-gtk-theme": true,
+  "cssPriority": "user",
+  "positionX": "right",
+  "positionY": "top",
+  "layer": "overlay",
+  "control-center-layer": "top",
+  "layer-shell": true,
+  "layer-shell-cover-screen": true,
+  "control-center-margin-top": 6,
+  "control-center-margin-bottom": 6,
+  "control-center-margin-right": 6,
+  "control-center-margin-left": 0,
+  "control-center-width": 380,
+  "control-center-height": 600,
+  "fit-to-screen": true,
+  "notification-window-width": 360,
+  "timeout": 5,
+  "timeout-low": 3,
+  "timeout-critical": 60,
+  "notification-grouping": true,
+  "notification-2fa-action": true,
+  "notification-inline-replies": false,
+  "notification-body-image-height": 100,
+  "notification-body-image-width": 200,
+  "image-visibility": "when-available",
+  "relative-timestamps": true,
+  "keyboard-shortcuts": true,
+  "transition-time": 60,
+  "hide-on-clear": true,
+  "hide-on-action": true,
+  "text-empty": "No Notifications",
+  "script-fail-notify": true,
+  "widgets": [
+    "buttons-grid",
+    "volume",
+    "backlight",
+    "mpris",
+    "title",
+    "dnd",
+    "notifications"
+  ],
+  "widget-config": {
+    "title": {
+      "text": "Notifications",
+      "clear-all-button": true,
+      "button-text": "Clear All"
+    },
+    "dnd": {
+      "text": "Do Not Disturb"
+    },
+    "notifications": {
+      "vexpand": true
+    },
+    "buttons-grid": {
+      "buttons-per-row": 5,
+      "actions": [
+        {
+          "label": "󰖩",
+          "type": "toggle",
+          "command": "[ $SWAYNC_TOGGLE_STATE = true ] && nmcli radio wifi on || nmcli radio wifi off",
+          "update-command": "nmcli radio wifi | grep -q enabled && echo true || echo false"
+        },
+        {
+          "label": "󰂯",
+          "type": "toggle",
+          "command": "[ $SWAYNC_TOGGLE_STATE = true ] && bluetoothctl power on || bluetoothctl power off",
+          "update-command": "bluetoothctl show | grep -q 'Powered: yes' && echo true || echo false"
+        },
+        {
+          "label": "󰅶",
+          "type": "toggle",
+          "command": "[ $SWAYNC_TOGGLE_STATE = true ] && pkill -x hypridle || setsid -f hypridle >/dev/null 2>&1",
+          "update-command": "pgrep -x hypridle >/dev/null && echo false || echo true"
+        },
+        {
+          "label": "󰹑",
+          "command": "swaync-client -cp; sleep 0.3; ~/bin/cmd-screenshot smart"
+        },
+        {
+          "label": "󰌾",
+          "command": "swaync-client -cp; hyprlock"
+        }
+      ]
+    },
+    "volume": {
+      "label": "󰕾",
+      "show-per-app": true,
+      "show-per-app-label": true
+    },
+    "backlight": {
+      "label": "󰃟",
+      "device": "intel_backlight"
+    },
+    "mpris": {
+      "autohide": true,
+      "show-album-art": "when-available",
+      "blacklist": [
+        "playerctld"
+      ]
+    }
+  }
+}

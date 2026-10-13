@@ -24,8 +24,8 @@
 !/.config/waybar/**
 !/.config/waybar/
 
-!/.config/mako/**
-!/.config/mako/
+!/.config/swaync/**
+!/.config/swaync/
 
 !/.config/walker/**
 !/.config/walker/

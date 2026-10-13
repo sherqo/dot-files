@@ -1,7 +1,13 @@
 /* Waybar Ash Theme */
+
+/* ===== Colors ===== */
 @define-color foreground #ffffff;
 @define-color background #121212;
+@define-color accent #FF4C7A;
+@define-color warning #D9480F;
+@define-color critical @accent;
 
+/* ===== Base ===== */
 * {
   background-color: @background;
   color: @foreground;
@@ -12,6 +18,7 @@
   font-size: 12px;
 }
 
+/* ===== Layout & spacing ===== */
 .modules-left {
   margin-left: 8px;
 }
@@ -20,6 +27,12 @@
   margin-right: 8px;
 }
 
+/* Left modules are spaced only by their " | " separators; right side gets one margin rule */
+.modules-right > widget > * {
+  margin: 0 5px;
+}
+
+/* ===== CENTER: workspaces ===== */
 #workspaces button {
   all: initial;
   padding: 0 6px;
@@ -31,74 +44,64 @@
   opacity: 0.4;
 }
 
+/* ===== RIGHT: language ===== */
 #language {
-  margin-right: 10px;
   min-width: 20px;
 }
 
-#privacy {
-  margin-left: 4px;
+/* ===== RIGHT: audio & battery ===== */
+#pulseaudio,
+#battery {
+  min-width: 12px;
 }
 
+#battery.warning:not(.charging) {
+  color: @warning;
+}
+
+#battery.critical:not(.charging) {
+  color: @critical;
+}
+
+/* ===== RIGHT: clock & calendar ===== */
+/* " - W42" sits right next to the clock */
+#clock {
+  margin-right: 0;
+}
+
+#custom-calendar {
+  margin-left: 0;
+}
+
+/* ===== RIGHT: privacy ===== */
 #privacy-item {
   margin: 3px 0;
+  border-radius: 4px;
+  padding: 0 4px;
 }
 
 #privacy-item.screenshare {
-  background-color: #FF4C7A;
-  border-radius: 4px;
-  padding: 0 4px;
+  background-color: @accent;
 }
 
 #privacy-item.audio-in {
-  background-color: #D9480F;
-  border-radius: 4px;
-  padding: 0 4px;
+  background-color: @warning;
 }
 
 #privacy-item image {
   background-color: transparent;
 }
 
-#battery,
-#pulseaudio {
-  min-width: 12px;
-  margin: 0 7.5px;
+/* ===== RIGHT: notifications ===== */
+/* Accent bell = unread notifications; dimmed = do not disturb */
+#custom-notification.notification,
+#custom-notification.inhibited-notification {
+  color: @accent;
 }
 
-#tray {
-  margin-right: 21px;
-}
-
-#bluetooth {
-  margin-right: 14px;
-}
-
-#network {
-  margin-right: 6px;
-}
-
-#custom-expand-icon {
-  margin-right: 16px;
-}
-
-#custom-cpu-mem {
-  font-size: 10px;
-  padding: 0px 2px;
-}
-
-tooltip {
-  padding: 1px;
-}
-
-#clock {
-  margin-left: 8.75px;
-}
-
-.hidden {
-  opacity: 0;
-}
-
-#custom-archi-btn {
-  font-size: 16px;
+#custom-notification.dnd-none,
+#custom-notification.dnd-notification,
+#custom-notification.dnd-inhibited-none,
+#custom-notification.dnd-inhibited-notification {
+  opacity: 0.5;
 }

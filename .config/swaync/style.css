@@ -1,0 +1,117 @@
+/* swaync notification center */
+
+/* ===== Colors & sizes (override the packaged defaults) ===== */
+:root {
+  --cc-bg: #121212;
+  --noti-border-color: #FF4C7A;
+  --noti-bg: 32, 35, 48; /* #202330 */
+  --noti-bg-alpha: 1;
+  --noti-bg-darker: #1A1C27;
+  --noti-bg-hover: #2A2D3D;
+  --noti-bg-focus: #2A2D3D;
+  --noti-close-bg: #2A2D3D;
+  --noti-close-bg-hover: #3A3E52;
+  --text-color: #FFF0F5;
+  --text-color-disabled: #8A8DA0;
+  --bg-selected: #FF4C7A;
+  --notification-icon-size: 40px;
+  --border: 1px solid var(--noti-border-color);
+  --border-radius: 5px;
+  --notification-shadow: none;
+  --font-size-body: 13px;
+  --font-size-summary: 15px;
+}
+
+* {
+  font-family: 'CaskaydiaMono Nerd Font';
+}
+
+/* ===== Popups: border color by urgency ===== */
+.notification-row .notification-background .notification.low {
+  border-color: #565970;
+}
+
+.notification-row .notification-background .notification.critical {
+  border-color: #FF7F9D;
+}
+
+/* ===== Control center ===== */
+.control-center {
+  border: var(--border);
+  border-radius: var(--border-radius);
+}
+
+.widget-dnd switch:checked {
+  background: var(--bg-selected);
+}
+
+/* ===== Group headers ("Screenshot", "Prayer", …): smaller than the default ===== */
+.notification-group .notification-group-headers .notification-group-header {
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.notification-group .notification-group-headers .notification-group-icon {
+  -gtk-icon-size: 16px;
+}
+
+/* ===== Quick buttons ===== */
+.widget-buttons-grid flowboxchild > button {
+  background: var(--noti-bg-darker);
+  font-size: 16px;
+  padding: 6px 0;
+}
+
+.widget-buttons-grid flowboxchild > button:hover {
+  background: var(--noti-bg-hover);
+}
+
+.widget-buttons-grid flowboxchild > button.toggle:checked {
+  background: var(--bg-selected);
+  color: #121212;
+}
+
+/* ===== Sliders (volume, brightness) ===== */
+.widget-volume label,
+.widget-backlight label {
+  font-size: 16px;
+}
+
+.widget-volume scale highlight,
+.widget-backlight scale highlight {
+  background: var(--bg-selected);
+}
+
+:root {
+  --widget-volume-row-icon-size: 18px;
+  --mpris-album-art-icon-size: 64px;
+}
+
+/* ===== Empty panel: text only, no big bell icon ===== */
+.control-center .control-center-list-placeholder image {
+  -gtk-icon-size: 0;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  opacity: 0;
+}
+
+/* ===== Panel title ("Notifications") ===== */
+.widget-title > label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* ===== Tighter gap between the volume and brightness sliders ===== */
+.widget-volume {
+  margin-bottom: 2px;
+}
+
+.widget-backlight {
+  margin-top: 2px;
+}
+
+/* ===== Notification content: small inner padding (popups + panel) ===== */
+.notification-row .notification-background .notification .notification-default-action .notification-content {
+  padding: 6px;
+}

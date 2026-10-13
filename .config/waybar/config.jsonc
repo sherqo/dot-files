@@ -1,14 +1,16 @@
 {
+  // ===== Bar =====
   "layer": "bottom",
   "position": "top",
 
   "spacing": 0,
   "height": 26,
 
+  // ===== Layout =====
   "modules-left": ["cpu", "memory", "custom/prayer", "custom/task-timer", "mpris"],
   "modules-center": ["hyprland/workspaces"],
   "modules-right": [
-    "group/tray-expander",
+    "tray",
     "hyprland/language",
     "bluetooth",
     "network",
@@ -17,56 +19,57 @@
     "clock",
     "custom/calendar",
     "privacy",
+    "custom/notification",
   ],
 
+  // ===== LEFT: system stats, prayer times, task timer, media =====
   "cpu": {
     "interval": 3,
-    "format": "CPU: {icon} ",
-    "format-icons": [
-      "░░░░░░░░░░",
-      "█░░░░░░░░░",
-      "██░░░░░░░░",
-      "███░░░░░░░",
-      "████░░░░░░",
-      "█████░░░░░",
-      "██████░░░░",
-      "███████░░░",
-      "████████░░",
-      "█████████░",
-      "██████████",
-    ],
+    "format": "CPU {usage:02}%",
     "tooltip": true,
     "on-click": "xdg-terminal-exec btop",
   },
 
   "memory": {
     "interval": 5,
-    "format": "MEM: {icon} ",
-    "format-icons": [
-      "░░░░░░░░░░",
-      "█░░░░░░░░░",
-      "██░░░░░░░░",
-      "███░░░░░░░",
-      "████░░░░░░",
-      "█████░░░░░",
-      "██████░░░░",
-      "███████░░░",
-      "████████░░",
-      "█████████░",
-      "██████████",
-    ],
+    "format": " MEM {percentage:02}%",
+    "tooltip-format": "{used:0.1f}G / {total:0.1f}G",
     "tooltip": true,
     "on-click": "xdg-terminal-exec btop",
   },
 
   "custom/prayer": {
-    "format": "{}",
+    "format": " | {}",
     "return-type": "json",
     "exec": "bun ~/.config/waybar/prayer/prayer.cjs",
     "interval": 60,
     "on-click": "xdg-open https://www.holyquranradio.com",
   },
 
+  "custom/task-timer": {
+    "exec": "~/.config/waybar/scripts/task-timer.sh",
+    "return-type": "json",
+    "format": " | {}",
+    "interval": 1,
+    "on-click": "~/.config/waybar/scripts/task-timer.sh click",
+    "on-click-right": "~/.config/waybar/scripts/task-timer.sh right",
+    "on-scroll-up": "~/.config/waybar/scripts/task-timer.sh up",
+    "on-scroll-down": "~/.config/waybar/scripts/task-timer.sh down",
+    "tooltip": true,
+  },
+
+  "mpris": {
+    "dynamic-order": ["title", "artist"],
+    "format": " | {player_icon} {dynamic}",
+    "format-paused": " | ⏸ {dynamic}",
+    "dynamic-len": 40,
+    "player-icons": {
+      "default": "▶",
+      "spotify": "",
+    },
+  },
+
+  // ===== CENTER: workspaces =====
   "hyprland/workspaces": {
     "format": "{icon}",
     "format-icons": {
@@ -96,6 +99,11 @@
     "tooltip": true,
   },
 
+  // ===== RIGHT: tray, input, connectivity, audio, power, date/time, privacy =====
+  "tray": {
+    "spacing": 5,
+  },
+
   "hyprland/language": {
     "format": "{}",
     "format-en": "US",
@@ -106,21 +114,12 @@
     "tooltip": false,
   },
 
-  "clock": {
-    "format": "{:L%a %d %b - %H:%M}",
-    "return-type": "json",
-    "tooltip-format": "{:%c}",
-    "tooltip": true,
-    "on-click": "xdg-open https://calendar.google.com",
-  },
-
-  "custom/calendar": {
-    "format": "{}",
-    "return-type": "json",
-    "exec": "~/.config/waybar/scripts/calendar_hover.sh",
-    "interval": 3600,
-    "tooltip": true,
-    "on-click": "xdg-open https://calendar.google.com",
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "󰂲",
+    "format-connected": "",
+    "tooltip-format": "Devices connected: {num_connections}",
+    "on-click": "xdg-terminal-exec --app-id=org.sherqo.bluetui -- /usr/sbin/bluetui",
   },
 
   "network": {
@@ -136,6 +135,20 @@
     "spacing": 1,
     "on-click": "xdg-terminal-exec --app-id=org.sherqo.zephyr -- /home/sherqo/go/bin/zephyr",
   },
+
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-muted": "",
+    "on-click": "xdg-terminal-exec --app-id=org.sherqo.ember -- /home/sherqo/go/bin/ember",
+    "on-click-right": "pamixer -t",
+    "tooltip-format": "Playing at {volume}%",
+    "scroll-step": 5,
+    "format-icons": {
+      "headphone": "",
+      "default": ["", "", ""],
+    },
+  },
+
   "battery": {
     "format": "{capacity}% {icon}",
     "on-click": "xdg-terminal-exec --app-id=org.sherqo.hearth -- /home/sherqo/go/bin/hearth",
@@ -155,72 +168,21 @@
       "critical": 10,
     },
   },
-  "bluetooth": {
-    "format": "",
-    "format-disabled": "󰂲",
-    "format-connected": "",
-    "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "xdg-terminal-exec --app-id=org.sherqo.bluetui -- /usr/sbin/bluetui",
-  },
-  "pulseaudio": {
-    "format": "{icon}",
-    "on-click": "xdg-terminal-exec --app-id=org.sherqo.ember -- /home/sherqo/go/bin/ember",
-    "on-click-right": "pamixer -t",
-    "tooltip-format": "Playing at {volume}%",
-    "scroll-step": 5,
-    "headphone": "",
-    "format-icons": {
-      "format-muted": "",
-      "default": ["", "", ""],
-    },
-  },
-  "group/tray-expander": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 100,
-      "children-class": "tray-group-item",
-    },
-    "modules": ["custom/expand-icon", "tray"],
-  },
-  "custom/expand-icon": {
-    "format": "󰞗",
-    "tooltip": false,
-  },
 
-  "mpris": {
-    "dynamic-order": ["title", "artist"],
-    "format": " | {player_icon} {dynamic} | ",
-    "format-paused": " | ⏸ {dynamic} | ",
-    "dynamic-len": 40,
-    "player-icons": {
-      "default": "▶",
-      "spotify": "",
-    },
-  },
-
-  "custom/timer": {
-    "exec": "~/.config/waybar/scripts/timer.sh",
-    "return-type": "json",
-    "format": " | {}",
-    "on-click": "~/.config/waybar/scripts/timer.sh click",
-    "on-click-right": "~/.config/waybar/scripts/timer.sh right",
-    "on-click-middle": "~/.config/waybar/scripts/timer.sh middle",
-    "on-scroll-up": "~/.config/waybar/scripts/timer.sh down",
-    "on-scroll-down": "~/.config/waybar/scripts/timer.sh up",
+  "clock": {
+    "format": "{:L%a %d %b - %H:%M}",
+    "tooltip-format": "{:%c}",
     "tooltip": true,
-    "escape": true,
+    "on-click": "xdg-open https://calendar.google.com",
   },
 
-  "custom/task-timer": {
-    "exec": "~/.config/waybar/scripts/task-timer.sh",
+  "custom/calendar": {
+    "format": "{}",
     "return-type": "json",
-    "format": " | {}",
-    "interval": 1,
-    "on-click": "~/.config/waybar/scripts/task-timer.sh click",
-    "on-click-right": "~/.config/waybar/scripts/task-timer.sh right",
-    "on-scroll-up": "~/.config/waybar/scripts/task-timer.sh up",
-    "on-scroll-down": "~/.config/waybar/scripts/task-timer.sh down",
+    "exec": "~/.config/waybar/scripts/calendar_hover.sh",
+    "interval": 3600,
     "tooltip": true,
+    "on-click": "xdg-open https://calendar.google.com",
   },
 
   "privacy": {
@@ -231,5 +193,25 @@
       { "type": "screenshare", "tooltip": true, "icon-name": "screen-shared-symbolic" },
       { "type": "audio-in", "tooltip": true, "icon-name": "audio-input-microphone-symbolic" },
     ],
+  },
+
+  "custom/notification": {
+    "exec": "swaync-client -swb",
+    "exec-if": "which swaync-client",
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "none": "󰂚",
+      "notification": "󰂚",
+      "inhibited-none": "󰂚",
+      "inhibited-notification": "󰂚",
+      "dnd-none": "󰂛",
+      "dnd-notification": "󰂛",
+      "dnd-inhibited-none": "󰂛",
+      "dnd-inhibited-notification": "󰂛",
+    },
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true,
   },
 }

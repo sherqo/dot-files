@@ -7,8 +7,8 @@ CURRENT=$(pactl list cards | grep "Active Profile:" | tail -1 | sed 's/.*Active 
 
 if [ "$CURRENT" = "$HEADSET" ]; then
     pactl set-card-profile "$CARD" "$SPEAKERS"
-    notify-send "Audio" "Switched to Speakers" -t 1500
+    notify-send -a "Audio" -e -i audio-speakers "Audio" "Switched to Speakers" -t 1500
 else
     pactl set-card-profile "$CARD" "$HEADSET"
-    notify-send "Audio" "Switched to Headset" -t 1500
+    notify-send -a "Audio" -e -i audio-headset "Audio" "Switched to Headset" -t 1500
 fi

@@ -93,10 +93,10 @@ handle_expiry() {
         return
     }
 
-    # Alarm (fire-and-forget) + tofi picker. Notification-daemon action
-    # buttons are unreliable (mako swallows the clicks, so -A actions never
-    # resolve), so the Done/Extend choice lives in tofi, which always works.
-    notify-send -u critical -t 10000 \
+    # Alarm (fire-and-forget) + tofi picker. The Done/Extend choice lives in
+    # tofi rather than notification action buttons, so it works regardless
+    # of the notification daemon.
+    notify-send -a "Task Timer" -u critical -t 10000 \
         "Time's up: ${TASK}" "Done or need more time?" 2>/dev/null &
     local action=""
     action=$(printf 'Extend\nDone\n' | tofi --prompt-text "Time's up: ${TASK} — " 2>/dev/null)

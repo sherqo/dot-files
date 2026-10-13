@@ -54,13 +54,10 @@ end, d("Toggle live wallpaper"))
 hl.bind("XF86PowerOff", hl.dsp.exec_cmd("hyprlock"), d("Lock screen"))
 
 -- ─── Notifications ─────────────────────────────────────────────────────────
-hl.bind("SUPER + comma",         hl.dsp.exec_cmd("makoctl dismiss"),     d("Dismiss last notification"))
-hl.bind("SUPER + SHIFT + comma", hl.dsp.exec_cmd("makoctl dismiss --all"), d("Dismiss all notifications"))
-hl.bind("SUPER + CTRL + comma", function()
-    hl.exec_cmd("makoctl mode -t do-not-disturb")
-    -- Small delay then check mode and notify
-    hl.exec_cmd([[sh -c 'sleep 0.1 && makoctl mode | grep -q do-not-disturb && notify-send "Silenced notifications" || notify-send "Enabled notifications"']])
-end, d("Toggle DnD notifications"))
+hl.bind("SUPER + comma",         hl.dsp.exec_cmd("swaync-client --close-latest"),            d("Dismiss last notification"))
+hl.bind("SUPER + SHIFT + comma", hl.dsp.exec_cmd("swaync-client --close-all"),               d("Dismiss all notifications"))
+hl.bind("SUPER + CTRL + comma",  hl.dsp.exec_cmd("swaync-client --toggle-dnd"),              d("Toggle DnD notifications"))
+hl.bind("SUPER + ALT + comma",   hl.dsp.exec_cmd("swaync-client --toggle-panel --skip-wait"), d("Toggle notification center"))
 
 -- ─── Screenshots ───────────────────────────────────────────────────────────
 hl.bind("Print",               hl.dsp.exec_cmd("~/bin/cmd-screenshot smart"),               d("Screenshot with editing"))

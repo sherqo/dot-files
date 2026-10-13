@@ -218,6 +218,14 @@ local win = vim.api.nvim_open_win(buf, false, {
 
 vim.wo[win].winhl = 'Normal:Clock'
 
+vim.api.nvim_create_autocmd('VimResized', {
+  callback = function()
+    if vim.api.nvim_win_is_valid(win) then
+      vim.api.nvim_win_set_config(win, { relative = 'editor', row = 0, col = vim.o.columns - 5 })
+    end
+  end,
+})
+
 local timer = vim.uv.new_timer()
 if timer then
   timer:start(0, 1000, vim.schedule_wrap(function()

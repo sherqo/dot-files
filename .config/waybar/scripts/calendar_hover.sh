@@ -6,21 +6,17 @@ week=$(date +%V)
 # ---- month calendar ----
 month=$(cal --iso -m)
 
-# ---- year dots ----
-day=$(date +%j)   # day of year
-dots=""
-for i in $(seq 1 365); do
-  if [ "$i" -le "$day" ]; then
-    dots+="● "
-  else
-    dots+="○ "
-  fi
+# ---- year progress (leap-year aware) ----
+day=$((10#$(date +%j)))
+days=$((10#$(date -d "$(date +%Y)-12-31" +%j)))
+pct=$((day * 100 / days))
+filled=$((pct / 5))
+bar=""
+for ((i = 0; i < 20; i++)); do
+  if [ "$i" -lt "$filled" ]; then bar+="▰"; else bar+="▱"; fi
 done
 
-# wrap dots so tooltip doesn't go stupid wide
-dots=$(echo "$dots" | fold -w 28)
-
-tooltip="$month\n\nYear progress:\n$dots"
+tooltip="$month\n\nYear progress: day $day/$days\n$bar $pct%"
 
 # escape newlines for waybar JSON
 tooltip=$(echo "$tooltip" | sed ':a;N;$!ba;s/\n/\\n/g')
