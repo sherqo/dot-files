@@ -1,6 +1,7 @@
 -- # See https://wiki.hyprland.org/Configuring/Monitors/
 
 hl.monitor({ output = "DP-1",  mode = "1920x1080@75.03",  position = "0x0",       scale = 1,    cm = "auto", disabled = false })
+hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@74.97", position = "0x0",     scale = 1,    cm = "auto", disabled = false })
 hl.monitor({ output = "eDP-1", mode = "1920x1080@120.00", position = "auto-left", scale = 1.25, cm = "auto", disabled = false })
 
 -- Workspace-to-monitor assignment via workspace rules

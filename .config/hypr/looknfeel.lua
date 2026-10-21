@@ -85,12 +85,10 @@ hl.config({
         disable_hyprland_logo    = true,
         disable_splash_rendering = true,
         focus_on_activate        = true,
-        anr_missed_pings         = 3,
         key_press_enables_dpms   = true,
-        mouse_move_enables_dpms  = true,
+        mouse_move_enables_dpms  = false,
         on_focus_under_fullscreen = 1,
         vrr = 0,
-        render_unfocused_fps = 12,
         -- vfr moved to debug category in 0.55, don't set it here
     },
 

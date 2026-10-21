@@ -53,7 +53,7 @@ alias trash='trash-put'
 alias rm='rm -Iv'
 
 # zed code editor
-alias zed='zeditor'
+alias zed='zeditor --classic'
 
 # get used ports
 alias ports='ss -tulpn'

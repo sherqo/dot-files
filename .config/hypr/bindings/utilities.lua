@@ -3,7 +3,9 @@
 local function d(desc) return { description = desc } end
 
 -- ─── Terminal ──────────────────────────────────────────────────────────────
-hl.bind("SUPER + Return", hl.dsp.exec_cmd("alacritty"), d("Terminal"))
+hl.bind("SUPER + Return", hl.dsp.exec_cmd("~/bin/cmd-terminal-here"), d("Terminal here (same dir)"))
+-- Plain terminal in $HOME
+hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd("alacritty"), d("Terminal"))
 
 -- ─── App launcher ──────────────────────────────────────────────────────────
 -- Toggle tofi-drun (kill if running, else launch)

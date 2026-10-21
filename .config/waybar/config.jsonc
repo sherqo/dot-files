@@ -59,7 +59,7 @@
   },
 
   "mpris": {
-    "dynamic-order": ["title", "artist"],
+    "dynamic-order": ["artist"],
     "format": " | {player_icon} {dynamic}",
     "format-paused": " | ⏸ {dynamic}",
     "dynamic-len": 40,
@@ -101,6 +101,7 @@
 
   // ===== RIGHT: tray, input, connectivity, audio, power, date/time, privacy =====
   "tray": {
+    "icon-size": 13,
     "spacing": 5,
   },
 
