@@ -3,12 +3,12 @@
 
 local gh = require('config.util').gh
 
--- Copilot (restored from nvim.bak plugins.lua:88)
-vim.pack.add { gh 'zbirenbaum/copilot.lua' }
-require('copilot').setup {
-  suggestion = { enabled = false },
-  panel = { enabled = false },
-}
+-- Copilot (restored from nvim.bak plugins.lua:88) — DISABLED
+-- vim.pack.add { gh 'zbirenbaum/copilot.lua' }
+-- require('copilot').setup {
+--   suggestion = { enabled = false },
+--   panel = { enabled = false },
+-- }
 
 -- NOTE: zbirenbaum/copilot-cmp removed — it requires hrsh7th/nvim-cmp (module 'cmp')
 -- which you don't have (you use blink.cmp). Keeping it caused:

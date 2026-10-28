@@ -8,8 +8,8 @@ hl.bind("SUPER + Return", hl.dsp.exec_cmd("~/bin/cmd-terminal-here"), d("Termina
 hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd("alacritty"), d("Terminal"))
 
 -- ─── App launcher ──────────────────────────────────────────────────────────
--- Toggle tofi-drun (kill if running, else launch)
-hl.bind("SUPER + Space", hl.dsp.exec_cmd("tofi-drun"), d("Launch apps"))
+-- Toggle tofi launcher with web search support (kill if running, else launch)
+hl.bind("SUPER + Space", hl.dsp.exec_cmd("~/bin/cmd-app-launcher"), d("Launch apps"))
 
 -- ─── Aesthetics ────────────────────────────────────────────────────────────
 hl.bind("SUPER + SHIFT + BackSpace", function()
