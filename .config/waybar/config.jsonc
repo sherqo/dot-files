@@ -1,13 +1,13 @@
 {
   // ===== Bar =====
-  "layer": "bottom",
+  "layer": "top",
   "position": "top",
 
   "spacing": 0,
   "height": 26,
 
   // ===== Layout =====
-  "modules-left": ["cpu", "memory", "custom/prayer", "custom/task-timer", "mpris"],
+  "modules-left": ["cpu", "memory", "custom/prayer", "custom/task-timer", "mpris", "custom/lyrics"],
   "modules-center": ["hyprland/workspaces"],
   "modules-right": [
     "tray",
@@ -59,6 +59,7 @@
   },
 
   "mpris": {
+    "ignored-players": ["spotify"], // lyrics module already works for spotify
     "dynamic-order": ["artist"],
     "format": " | {player_icon} {dynamic}",
     "format-paused": " | ⏸ {dynamic}",
@@ -67,6 +68,23 @@
       "default": "▶",
       "spotify": "",
     },
+  },
+  
+  "custom/lyrics": { // for spotify only https://github.com/Nadim147c/waybar-lyric
+    "return-type": "json",
+    "format": " | {icon} {0}",
+    "hide-empty-text": false,
+    "format-icons": {
+      "playing": "",
+      "paused": "",
+      "lyric": "󰝚",
+      "music": "󰝚",
+      "no_lyric": "",
+      "getting": "",
+    },
+    "exec-if": "which waybar-lyric",
+    "exec": "waybar-lyric --quiet",
+    "on-click": "waybar-lyric play-pause",
   },
 
   // ===== CENTER: workspaces =====

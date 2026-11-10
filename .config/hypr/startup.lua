@@ -1,7 +1,7 @@
 -- startup.lua
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("swaybg -i ~/media/img/wallpapers/wallhaven-rqe6y1_1920x1080.png -m fill")
+    hl.exec_cmd("swaybg -i ~/media/img/wallpapers/wallhaven-w5xdzx_1920x1080.png -m fill")
     hl.exec_cmd("waybar")
     hl.exec_cmd("wl-paste --watch clipvault store")
     hl.exec_cmd("swayosd-server")
@@ -14,5 +14,5 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("/usr/lib/xdg-desktop-portal &")
 
     -- Autostart apps
-    hl.exec_cmd("sleep 5 && vesktop --start-minimized") -- ensure everything is good so the tray works
+    hl.exec_cmd("sleep 5 && discord --start-minimized") -- ensure everything is good so the tray works
 end)

@@ -44,6 +44,12 @@
   opacity: 0.4;
 }
 
+/* ===== LEFT: prayer / iqama countdown ===== */
+/* Accent while the adhan is inside its last 15 minutes */
+#custom-prayer.urgent {
+  color: @accent;
+}
+
 /* ===== RIGHT: language ===== */
 #language {
   min-width: 20px;
