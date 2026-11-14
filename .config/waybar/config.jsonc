@@ -16,6 +16,7 @@
     "network",
     "pulseaudio",
     "battery",
+    "custom/water",
     "clock",
     "custom/calendar",
     "privacy",
@@ -186,6 +187,18 @@
       "warning": 20,
       "critical": 10,
     },
+  },
+
+  "custom/water": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "~/.config/waybar/scripts/water.py",
+    "interval": 30,
+    "signal": 8,
+    "on-click": "~/.config/waybar/scripts/water.py drink",
+    "on-click-right": "~/.config/waybar/scripts/water.py undo",
+    "on-click-middle": "~/.config/waybar/scripts/water.py reset",
+    "tooltip": true,
   },
 
   "clock": {

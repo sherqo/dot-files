@@ -69,6 +69,23 @@
   color: @critical;
 }
 
+/* ===== RIGHT: water tracker ===== */
+#custom-water {
+  min-width: 12px;
+}
+
+#custom-water.hydrated {
+  color: @foreground;
+}
+
+#custom-water.warning {
+  color: @warning;
+}
+
+#custom-water.critical {
+  color: @critical;
+}
+
 /* ===== RIGHT: clock & calendar ===== */
 /* " - W42" sits right next to the clock */
 #clock {
