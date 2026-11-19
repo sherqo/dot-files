@@ -34,6 +34,7 @@ alias cd='z'                                                         # replaces 
 alias ..='z ..'                                                      # go up 1 directory
 alias ...='z ../..'                                                  # go up 2 directories
 alias ....='z ../../..'                                              # go up 3 directories
+alias open="xdg-open"                                                # shorter
 
 # eval "$(zoxide init bash)"
 _zoxide_cache="$HOME/.cache/zoxide_init.sh"
